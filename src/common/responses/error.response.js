@@ -19,16 +19,17 @@ export const InternalServerError = (statusCode = 500, message = "Internal Server
     return errorResponse(statusCode, message, null);
 }
 
-export const errorResponse = (res, statusCode, message, data) => {
+export const errorResponse = (res, statusCode, message, error = null) => {
     return res.status(statusCode).json({
         success : false,
         message : message,
-        data : data
+        error : error?.[0]?.message
     });
 }
 
 export const globalErrorHandler = (err, req, res, next) => {
     const statusCode = err.statusCode || err.status || 500;
     const message = err.message || "Internal Server Error";
-    return errorResponse(res, statusCode, message, null);
+    const error = err.errors ?? null;
+    return errorResponse(res, statusCode, message, error);
 }
