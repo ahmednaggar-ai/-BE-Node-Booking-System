@@ -6,6 +6,7 @@ import {
 } from "../../common/validators/common.validator.js";
 import {
   createBookingSchema,
+  getUserBookingsQuery,
   updateBookingSchema,
 } from "./booking.validator.js";
 import {
@@ -24,7 +25,11 @@ router.use(authenticate);
 
 router.post("/create", validate({ body: createBookingSchema }), createBooking);
 router.get("/", validate({ query: paginationQuery }) /* listBookings */);
-router.get("/getUserBookings", getUserBookings);
+router.get(
+  "/getUserBookings",
+  validate({ query: getUserBookingsQuery }),
+  getUserBookings,
+);
 router.get("/:id", validate({ params: mongoIdParams }), getBookingById);
 router.patch(
   "/:id",

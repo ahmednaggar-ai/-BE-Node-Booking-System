@@ -15,3 +15,15 @@ export const updateBookingSchema = z.object({
         error: "Status must be pending or confirmed",
     }),
 });
+
+export const getUserBookingsQuery = z
+    .object({
+        status: bookingStatus.optional(),
+        sort: z.enum(["bookingDate"]).optional(),
+        order: z.enum(["asc", "desc"]).optional(),
+        search: z.string().trim().min(1, "Search term is required").optional(),
+    })
+    .refine((data) => !data.order || data.sort, {
+        message: "order requires sort=bookingDate",
+        path: ["order"],
+    });
